@@ -16,3 +16,14 @@ sudo python3 -m pip install git+git://github.com/retrodaredevil/see-docker.git
 # or
 python3 -m pip install git+git://github.com/retrodaredevil/see-docker.git
 ```
+
+## Common Errors
+
+### `error: invalid command 'bdist_wheel'`
+
+Run this before installing:
+
+```shell
+python3 -m pip install setuptools --upgrade
+python3 -m pip install wheel
+```

@@ -13,5 +13,5 @@ setup(
             "see-docker = see_docker:do_see_docker",
         ],
     },
-    install_requires=["wheel", "docker==6.1.3"]
+    install_requires=["docker==6.1.3", "python-dateutil==2.8.2", "pytz==2023.3.post1"]
 )
