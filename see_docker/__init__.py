@@ -33,6 +33,32 @@ def see_docker_main(args: List[str]) -> int:
         created_time: datetime.datetime = dateutil.parser.isoparse(creation_time_string)
         created_time_display = created_time.astimezone(current_timezone).strftime("%Y-%m-%d %H:%M:%S %Z")
         print(f"\n{network.name:<30} ({network.short_id})  created: {created_time_display}")
+        # print(network.attrs)
+        if network.attrs["IPAM"] and network.attrs["IPAM"]["Config"]:
+            for ipam_config in network.attrs["IPAM"]["Config"]:
+                print(
+                    f"    {'IPAM':<10} "
+                    f"{'Subnet: ' + ipam_config['Subnet']:<60}"
+                    f"{'Gateway: ' + (ipam_config.get('Gateway') or '???'):<60}"
+                )
+
+        compose_network: Optional[str] = (
+            network.attrs["Labels"]["com.docker.compose.network"]
+            if network.attrs["Labels"] and network.attrs["Labels"]["com.docker.compose.network"]
+            else None
+        )
+        compose_project: Optional[str] = (
+            network.attrs["Labels"]["com.docker.compose.project"]
+            if network.attrs["Labels"] and network.attrs["Labels"]["com.docker.compose.project"]
+            else None
+        )
+        if compose_network or compose_project:
+            print(
+                f"    {'Compose':<10} "
+                f"{'Network: ' + compose_network:<60}"
+                f"{'Project: ' + compose_project:<60}"
+            )
+
         for container_id, container_attrs in network.attrs["Containers"].items():
             container_short_id = container_id[:12]
             container_name = container_attrs["Name"]
